@@ -9,4 +9,9 @@ public class Config {
     public String applicationName(){
         return "sales system";
     }
+
+    @Bean(name = "outraConfig")
+    public String outraConfig(){
+        return "outraConfig";
+    }
 }
