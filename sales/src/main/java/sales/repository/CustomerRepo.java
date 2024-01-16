@@ -1,54 +1,46 @@
 package sales.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import sales.model.Customer;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 @Repository
 public class CustomerRepo {
 
-    private static String INSERT = "insert into customer (name) values (?) ";
-    private static String SELECT_ALL = "select * from customer";
-    private static String SELECT_NAME = "select * from customer where name = ?";
-    private static String UPDATE = "update customer set name = ? where id = ?";
-    private static String DELETE = "delete from customer  where id = ?";
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private EntityManager entityManager;
 
+    @Transactional
     public void save(Customer customer) {
-        jdbcTemplate.update(INSERT, customer.getName());
+        entityManager.persist(customer);
     }
 
+    @Transactional(readOnly = true)
     public List<Customer> getCustomers(){
-        return jdbcTemplate.query(SELECT_ALL, new RowMapper<Customer>(){
-            @Override
-            public Customer mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Customer(rs.getInt("id"), rs.getString("name"));
-            }
-        });
+        return entityManager.createQuery("from Customer", Customer.class).getResultList();
     }
 
+    @Transactional(readOnly = true)
     public List<Customer> getCustomersByName(String name){
-        return jdbcTemplate.query(SELECT_NAME, new Object[]{"%" + name + "%"},new RowMapper<Customer>(){
-            @Override
-            public Customer mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Customer(2, rs.getString("name"));
-            }
-        });
+        String jpql = " select c from Customer c where c.name = like : ";
+        TypedQuery<Customer> query = entityManager.createQuery(jpql, Customer.class);
+        query.setParameter("name","%"+name+"%");
+        return query.getResultList();
     }
 
+    @Transactional
     public Customer update(Customer customer){
-        jdbcTemplate.update(UPDATE, customer.getName(),customer.getId());
+        entityManager.merge(customer);
         return customer;
     }
 
+    @Transactional
     public void delete(Integer id){
-        jdbcTemplate.update(DELETE, id);
+        entityManager.remove(entityManager.find(Customer.class,id));
     }
 }

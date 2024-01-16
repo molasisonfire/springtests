@@ -38,10 +38,10 @@ public class SalesApplication {
     @Bean(name="sales")
     public CommandLineRunner init(@Autowired CustomerRepo customers){
         return args -> {
-            customers.save(new Customer(1, "John"));
-            customers.save(new Customer(2, "Anselmo"));
+            customers.save(new Customer( "John"));
+            customers.save(new Customer( "Anselmo"));
             customers.getCustomers().forEach(System.out::println);
-            customers.update(new Customer(2, "Kite"));
+            customers.update(new Customer("Kite"));
             customers.delete(1);
             customers.getCustomers().forEach(System.out::println);
             customers.getCustomersByName("nope").forEach(System.out::println);

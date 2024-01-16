@@ -1,12 +1,22 @@
 package sales.model;
 
-public class Customer {
-    private Integer id;
+import jakarta.persistence.*;
 
-    public Customer(int i, String name) {
+@Entity
+@Table( name = "Customer")
+public class Customer {
+    @Id
+    @GeneratedValue( strategy = GenerationType.AUTO)
+    @Column
+    private Integer id;
+    private String name;
+
+    public Customer(String name) {
         this.name = name;
-        this.id = i;
     }
+    public Customer() {
+    }
+
 
     public String getName() {
         return name;
@@ -15,8 +25,6 @@ public class Customer {
     public void setName(String name) {
         this.name = name;
     }
-
-    private String name;
 
     public Integer getId() {
         return id;
