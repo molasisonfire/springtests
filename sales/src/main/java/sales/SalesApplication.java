@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sales.model.Customer;
+import sales.repository.CustomerRepo;
 
 @SpringBootApplication
 @ComponentScan(basePackages =  {"sales.repository","sales.service", "sales"})
@@ -31,7 +33,20 @@ public class SalesApplication {
         return args -> {
             this.animal.doNoise();
         };
+    }
 
+    @Bean(name="sales")
+    public CommandLineRunner init(@Autowired CustomerRepo customers){
+        return args -> {
+            customers.save(new Customer(1, "John"));
+            customers.save(new Customer(2, "Anselmo"));
+            customers.getCustomers().forEach(System.out::println);
+            customers.update(new Customer(2, "Kite"));
+            customers.delete(1);
+            customers.getCustomers().forEach(System.out::println);
+            customers.getCustomersByName("nope").forEach(System.out::println);
+
+        };
     }
 
     @GetMapping("/hello")
