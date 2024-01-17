@@ -44,7 +44,7 @@ public class SalesApplication {
             customers.update(new Customer("Kite"));
             customers.delete(1);
             customers.getCustomers().forEach(System.out::println);
-            customers.getCustomersByName("nope").forEach(System.out::println);
+            customers.getCustomersByName("Kite").forEach(System.out::println);
 
         };
     }

@@ -27,9 +27,9 @@ public class CustomerRepo {
 
     @Transactional(readOnly = true)
     public List<Customer> getCustomersByName(String name){
-        String jpql = " select c from Customer c where c.name = like : ";
+        String jpql = "from Customer c where c.name = :name ";
         TypedQuery<Customer> query = entityManager.createQuery(jpql, Customer.class);
-        query.setParameter("name","%"+name+"%");
+        query.setParameter("name",name);
         return query.getResultList();
     }
 
