@@ -40,11 +40,11 @@ public class SalesApplication {
         return args -> {
             customers.save(new Customer( "John"));
             customers.save(new Customer( "Anselmo"));
-            customers.getCustomers().forEach(System.out::println);
-            customers.update(new Customer("Kite"));
-            customers.delete(1);
-            customers.getCustomers().forEach(System.out::println);
-            customers.getCustomersByName("Kite").forEach(System.out::println);
+            customers.findAll().forEach(System.out::println);
+            customers.delete(new Customer(2,"Kite"));
+            customers.save(new Customer(2,"Kite"));
+            customers.findAll().forEach(System.out::println);
+            customers.findCustomersByName("Kite").forEach(System.out::println);
 
         };
     }

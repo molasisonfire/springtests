@@ -17,6 +17,11 @@ public class Customer {
     public Customer() {
     }
 
+    public Customer(Integer id , String name) {
+        this.id = id;
+        this.name = name;
+    }
+
 
     public String getName() {
         return name;

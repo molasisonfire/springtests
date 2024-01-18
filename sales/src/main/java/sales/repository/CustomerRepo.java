@@ -1,46 +1,16 @@
 package sales.repository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import sales.model.Customer;
 
 import java.util.List;
 
-@Repository
-public class CustomerRepo {
 
-    @Autowired
-    private EntityManager entityManager;
+public interface CustomerRepo extends JpaRepository<Customer,Integer> {
 
-    @Transactional
-    public void save(Customer customer) {
-        entityManager.persist(customer);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Customer> getCustomers(){
-        return entityManager.createQuery("from Customer", Customer.class).getResultList();
-    }
-
-    @Transactional(readOnly = true)
-    public List<Customer> getCustomersByName(String name){
-        String jpql = "from Customer c where c.name = :name ";
-        TypedQuery<Customer> query = entityManager.createQuery(jpql, Customer.class);
-        query.setParameter("name",name);
-        return query.getResultList();
-    }
-
-    @Transactional
-    public Customer update(Customer customer){
-        entityManager.merge(customer);
-        return customer;
-    }
-
-    @Transactional
-    public void delete(Integer id){
-        entityManager.remove(entityManager.find(Customer.class,id));
-    }
+    @Query(value= " select * from customer c where c.name like '%:name%' ", nativeQuery = true)
+    List<Customer> findCustomersByName(@Param("name") String name);
 }
