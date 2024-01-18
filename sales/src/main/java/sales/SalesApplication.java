@@ -11,12 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sales.model.Customer;
-import sales.model.Order;
 import sales.repository.CustomerRepo;
-import sales.repository.OrderRepo;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @SpringBootApplication
 @ComponentScan(basePackages =  {"sales.repository","sales.service", "sales"})
@@ -41,23 +36,11 @@ public class SalesApplication {
     }
 
     @Bean(name="sales")
-    public CommandLineRunner init(@Autowired CustomerRepo customers,
-                                  @Autowired OrderRepo orderRepo){
+    public CommandLineRunner init(@Autowired CustomerRepo customers){
         return args -> {
-            Customer customer = new Customer( "John");
-            customers.save(customer);
+            customers.save(new Customer( "John"));
             customers.save(new Customer( "Anselmo"));
             customers.findAll().forEach(System.out::println);
-            Order order = new Order();
-            order.setCustomer(customer);
-            order.setLocalDate(LocalDate.now());
-            order.setTotal(BigDecimal.valueOf(100));
-
-            orderRepo.save(order);
-            Customer c = customers.findCustomerFetchOrder(1);
-            System.out.println(c);
-            System.out.println(c.getOrder());
-
             customers.delete(new Customer(2,"Kite"));
             customers.save(new Customer(2,"Kite"));
             customers.findAll().forEach(System.out::println);

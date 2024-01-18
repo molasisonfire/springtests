@@ -2,8 +2,6 @@ package sales.model;
 
 import jakarta.persistence.*;
 
-import java.util.List;
-
 @Entity
 @Table( name = "Customer")
 public class Customer {
@@ -12,17 +10,6 @@ public class Customer {
     @Column
     private Integer id;
     private String name;
-
-    public List<Order> getOrder() {
-        return order;
-    }
-
-    public void setorder(List<Order> order) {
-        this.order = order;
-    }
-
-    @OneToMany(mappedBy = "customer")
-    private List<Order> order;
 
     public Customer(String name) {
         this.name = name;
@@ -54,10 +41,6 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", order=" + order +
-                '}';
+        return "Customer{id = "+ getId() +", name = "+getName() +"}";
     }
 }
