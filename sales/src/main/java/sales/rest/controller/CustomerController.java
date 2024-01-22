@@ -1,5 +1,6 @@
 package sales.rest.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class CustomerController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer save(@RequestBody Customer customer) {
+    public Customer save(@RequestBody @Valid Customer customer) {
         return customerRepo.save(customer);
     }
 

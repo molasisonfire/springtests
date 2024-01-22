@@ -1,6 +1,7 @@
 package sales.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table( name = "Customer")
@@ -9,6 +10,8 @@ public class Customer {
     @GeneratedValue( strategy = GenerationType.AUTO)
     @Column
     private Integer id;
+
+    @NotEmpty(message = "field name is mandatory")
     private String name;
 
     public Customer(String name) {
